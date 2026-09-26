@@ -27,7 +27,7 @@
 
 **Cause:** Resend's free tier restricts outbound email to the account owner's verified email address until a custom domain is verified.
 
-**Status:** Partially resolved. App works for verified email. Full public email delivery requires domain verification at resend.com/domains.
+**Status:** Resolved. Switched to Brevo's transactional email API, which can send to any address from a verified sender. Since v2.0 the Brevo API is called directly with a 10-second timeout so a slow provider can't hang a worker.
 
 ---
 
@@ -37,6 +37,8 @@
 **Cause:** Gunicorn spawns multiple worker processes. Each worker called `create_app()` which started its own `BackgroundScheduler` instance. All schedulers fired simultaneously for every due reminder.
 
 **Fix:** Removed scheduler from `create_app()`. Moved it to a gunicorn server hook in `gunicorn_config.py` using `on_starting()` — ensures exactly one scheduler instance starts at the server level regardless of worker count.
+
+**Update (v2.0):** The hook now lives in `gunicorn.conf.py`. The scheduled job no longer builds a new Flask app on every run (which also stacked up a new log handler each minute), and `max_instances=1` stops two checks from overlapping.
 
 ---
 
@@ -54,4 +56,4 @@
 
 **Cause:** When email delivery fails, the reminder stays `sent=0` in the database. The scheduler has no retry limit so it keeps attempting delivery on every interval.
 
-**Status:** Mitigated by fixing the email provider. A proper retry limit with exponential backoff is tracked in `ENHANCEMENTS.md`
+**Status:** Resolved in v2.0. Failed sends are retried after 2, 4, 8 and 16 minutes, then marked *Failed* after 5 attempts. The error is stored on the reminder for debugging. Covered by `tests/test_delivery.py`.

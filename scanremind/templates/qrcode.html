@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body_class %}qr-page{% endblock %}
+{% block body %}
+<main class="qr-container">
+    <div class="qr-brand">ScanRemind</div>
+    <div class="qr-tagline">Scan. Set. Get reminded.</div>
+    <img src="{{ url_for('qr.generate_qr') }}" alt="QR code linking to the ScanRemind reminder form" class="qr-image" width="220" height="220">
+    <div class="qr-instruction">📱 Point your camera at the QR code</div>
+    <a href="{{ target_url }}" class="qr-fallback">or open the reminder form →</a>
+</main>
+{% endblock %}

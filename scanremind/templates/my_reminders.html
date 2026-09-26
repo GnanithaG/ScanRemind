@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}My reminders · ScanRemind{% endblock %}
+{% block content %}
+<nav class="top-nav">
+    <span class="signed-in">{{ email }}</span>
+    <form action="{{ url_for('auth.logout') }}" method="post" class="inline-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="link-button">Sign out</button>
+    </form>
+</nav>
+<h1>My reminders</h1>
+{% include "_flashes.html" %}
+
+{% if reminders %}
+<ul class="reminders-list">
+    {% for r in reminders %}
+    <li class="reminder-card">
+        <div class="reminder-header">
+            <span class="reminder-title">{{ r.title }}</span>
+            <span class="reminder-status {{ r.status_class }}">{{ r.status }}</span>
+        </div>
+        <p class="reminder-detail">{{ r.description }}</p>
+        <p class="reminder-meta">
+            {% if r.status_class == 'sent' %}Sent{% else %}Next{% endif %}:
+            {{ r.when.strftime('%a, %b %-d, %Y · %-I:%M %p') }} <span class="muted">({{ r.timezone }})</span>
+            · Repeats: {{ 'never' if r.repeat == 'none' else r.repeat }}
+        </p>
+        <form action="{{ url_for('reminders.delete_reminder', reminder_id=r.id) }}" method="post"
+              onsubmit="return confirm('Delete this reminder?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="delete-btn">Delete</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty">You don't have any reminders yet.</p>
+{% endif %}
+
+<a href="{{ url_for('reminders.set_reminder') }}" class="button-link">Create a reminder</a>
+{% endblock %}

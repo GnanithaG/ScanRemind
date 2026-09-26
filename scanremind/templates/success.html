@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Reminder scheduled · ScanRemind{% endblock %}
+{% block content %}
+<div class="success">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h1>Reminder scheduled</h1>
+    <p>Thanks, {{ username }}. We'll email you on
+        <strong>{{ when.strftime('%a, %b %-d, %Y at %-I:%M %p') }}</strong>
+        ({{ when.tzinfo.key }}).</p>
+</div>
+<a href="{{ url_for('reminders.set_reminder') }}" class="button-link">Create another reminder</a>
+<a href="{{ url_for('auth.manage_reminders') }}" class="back-button">Manage my reminders</a>
+{% endblock %}

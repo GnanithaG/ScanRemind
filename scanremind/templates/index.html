@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Create a reminder · ScanRemind{% endblock %}
+{% block content %}
+<nav class="top-nav">
+    {% if session.get('verified_email') %}
+    <a href="{{ url_for('reminders.my_reminders') }}" class="manage-link">My reminders</a>
+    {% else %}
+    <a href="{{ url_for('auth.manage_reminders') }}" class="manage-link">Manage reminders</a>
+    {% endif %}
+</nav>
+<h1>Create a reminder</h1>
+{% include "_flashes.html" %}
+
+<form action="{{ url_for('reminders.create_reminder') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" id="timezone" name="timezone" value="{{ form.get('timezone', '') }}">
+
+    <label for="username">Your name</label>
+    <input type="text" id="username" name="username" maxlength="{{ config.MAX_NAME_LENGTH }}"
+           value="{{ form.get('username', '') }}" autocomplete="name" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ form.get('email', '') }}"
+           autocomplete="email" required>
+
+    <label for="title">What should we remind you about?</label>
+    <input type="text" id="title" name="title" maxlength="{{ config.MAX_TITLE_LENGTH }}"
+           value="{{ form.get('title', '') }}" required>
+
+    <label for="description">Details</label>
+    <textarea id="description" name="description" maxlength="{{ config.MAX_DESCRIPTION_LENGTH }}"
+              rows="4" required>{{ form.get('description', '') }}</textarea>
+
+    <div class="row">
+        <div>
+            <label for="reminder_date">Date</label>
+            <input type="date" id="reminder_date" name="reminder_date"
+                   value="{{ form.get('reminder_date', '') }}" required>
+        </div>
+        <div>
+            <label for="reminder_time">Time</label>
+            <input type="time" id="reminder_time" name="reminder_time"
+                   value="{{ form.get('reminder_time', '') }}" required>
+        </div>
+    </div>
+    <p class="hint">Times are in your time zone: <span id="tz-label">UTC</span></p>
+
+    <fieldset class="radio-group">
+        <legend>Repeat</legend>
+        {% set current = form.get('repeat', 'none') %}
+        {% for value, label in [('none', 'One time'), ('daily', 'Daily'), ('weekly', 'Weekly'), ('monthly', 'Monthly')] %}
+        <label><input type="radio" name="repeat" value="{{ value }}" {{ 'checked' if current == value }}> {{ label }}</label>
+        {% endfor %}
+    </fieldset>
+
+    <button type="submit">Schedule reminder</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    document.getElementById('timezone').value = tz;
+    document.getElementById('tz-label').textContent = tz;
+    const date = document.getElementById('reminder_date');
+    const today = new Date();
+    date.min = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+</script>
+{% endblock %}

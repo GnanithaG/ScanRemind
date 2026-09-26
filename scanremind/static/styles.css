@@ -50,6 +50,13 @@ label {
 
 input,
 textarea,
+select,
+button {
+    font-family: inherit;
+}
+
+input,
+textarea,
 select {
     padding: 10px 14px;
     border: 1.5px solid #ddd6fe;
@@ -112,10 +119,10 @@ button:hover {
 
 /* Delete button */
 .delete-btn {
-    margin-top: 10px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
+    margin-top: 12px;
+    background: transparent;
+    color: #dc3545;
+    border: 1.5px solid #f5c2c7;
     border-radius: 8px;
     padding: 8px 14px;
     cursor: pointer;
@@ -125,7 +132,8 @@ button:hover {
 }
 
 .delete-btn:hover {
-    background-color: #bb2d3b;
+    background-color: #fee2e2;
+    border-color: #dc3545;
 }
 
 /* Links */
@@ -155,19 +163,7 @@ a:hover {
     font-size: 14px;
 }
 
-.exit-btn {
-    display: block;
-    text-align: right;
-    margin-bottom: 15px;
-    color: #dc3545;
-    font-size: 14px;
-    font-weight: 600;
-}
-.exit-btn:hover {
-    text-decoration: underline;
-}
-
-.exit-btn, .manage-link, .back-button {
+.manage-link, .back-button {
     border-bottom: none;
 }
 
@@ -288,4 +284,169 @@ body.qr-page {
     margin-top: 20px;
     font-size: 13px;
     color: #9ca3af;
+}
+
+/* Layout helpers */
+.top-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.top-nav .manage-link {
+    margin-bottom: 0;
+}
+
+.signed-in {
+    color: #6b7280;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.row > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.lead {
+    color: #4b5563;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.hint,
+.muted {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.hint {
+    margin-top: 6px;
+}
+
+fieldset.radio-group {
+    border: none;
+    margin-top: 12px;
+}
+
+fieldset.radio-group legend {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+/* Secondary buttons and links */
+.button-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1.5px solid #ddd6fe;
+    font-weight: 600;
+}
+
+.button-link:hover {
+    background: #faf8ff;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.link-button {
+    margin: 0;
+    padding: 0;
+    background: none;
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.link-button:hover {
+    background: none;
+    text-decoration: underline;
+}
+
+/* Success page */
+.success {
+    text-align: center;
+}
+
+.success-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 56px;
+}
+
+.success p {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+/* Reminder list extras */
+ul.reminders-list {
+    list-style: none;
+}
+
+.reminder-meta {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+.reminder-detail {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.reminder-status.failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.empty {
+    text-align: center;
+    color: #6b7280;
+}
+
+.qr-fallback {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        margin: 16px auto;
+        padding: 22px 18px;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
 }
