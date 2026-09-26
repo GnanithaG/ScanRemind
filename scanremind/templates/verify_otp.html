@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Verify your email · ScanRemind{% endblock %}
+{% block content %}
+<h1>Check your email</h1>
+<p class="lead">We sent a 6-digit code to <strong>{{ email }}</strong>. It expires in {{ config.OTP_TTL_MINUTES }} minutes.</p>
+{% include "_flashes.html" %}
+<form action="{{ url_for('auth.verify_otp') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="otp">Verification code</label>
+    <input type="text" id="otp" name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+           autocomplete="one-time-code" autofocus required>
+    <button type="submit">Verify</button>
+</form>
+<a href="{{ url_for('auth.manage_reminders') }}" class="back-button">Use a different email or resend</a>
+{% endblock %}
